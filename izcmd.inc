@@ -35,6 +35,9 @@
       
 #define cmd(%1,%2,%3) \
 			COMMAND:%1(%2, %3)
+
+#define CMD_SUCCESS 1
+#define CMD_FAILURE 0
 /******************************************************************************************************************************/
 #if defined OnPlayerCommandReceived
 	forward OnPlayerCommandReceived(playerid,cmdtext[]);
@@ -42,23 +45,18 @@
 #if defined OnPlayerCommandPerformed
 	forward OnPlayerCommandPerformed(playerid,cmdtext[], success);
 #endif
+
 /******************************************************************************************************************************/
 public OnPlayerCommandText(playerid, cmdtext[])
 {
-    static funcname[MAX_FUNC_NAME] = "cmd_";
-
 	#if defined OnPlayerCommandReceived
 	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
 	#endif
+	static funcname[MAX_FUNC_NAME] = "cmd_";
 
-	new pos = 1;
-	
-    while(cmdtext[pos] > ' ')
-		if(cmdtext[pos] == '_') funcname[pos++ + 3] = '_';
-		else funcname[pos+3] = cmdtext[pos++] | 0x20;
-		
-	funcname[pos+3] = 0;
-	
+	new pos = strfind(cmdtext," ",false,1);
+	strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+
     while (cmdtext[pos] == ' ') pos++;
 	if(cmdtext[pos])
 	{
@@ -77,7 +75,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		#endif
 	}
 }
-
 #if defined _ALS_OnPlayerCommandText
     #undef OnPlayerCommandText
 #else
