@@ -3,7 +3,7 @@
 
  This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
 
- Version:0.1
+ Version:0.2.1
 
  Changes:
 	ZCMD to I-ZCMD
@@ -45,33 +45,33 @@
 #if defined OnPlayerCommandPerformed
 	forward OnPlayerCommandPerformed(playerid,cmdtext[], success);
 #endif
-
 /******************************************************************************************************************************/
 public OnPlayerCommandText(playerid, cmdtext[])
 {
 	#if defined OnPlayerCommandReceived
 	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
 	#endif
-	static funcname[MAX_FUNC_NAME] = "cmd_";
+	static funcname[MAX_FUNC_NAME] = "cmd_",pos;
 
-	new pos = strfind(cmdtext," ",false,1);
-	strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
-
-    while (cmdtext[pos] == ' ') pos++;
-	if(cmdtext[pos])
+	if((pos = strfind(cmdtext," ",false,1)) == -1)
 	{
-  		#if defined OnPlayerCommandPerformed
-			return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
+	    pos = strlen(cmdtext);
+        strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+	    #if defined OnPlayerCommandPerformed
+			return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\r"));
 		#else
-			return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
+			return CallLocalFunction(funcname,"is",playerid,"\r");
 		#endif
 	}
 	else
 	{
-	   	#if defined OnPlayerCommandPerformed
-			return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
+	    strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+    	while (cmdtext[pos] == ' ') pos++;
+        
+		#if defined OnPlayerCommandPerformed
+			return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
 		#else
-			return CallLocalFunction(funcname,"is",playerid,"\1");
+			return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
 		#endif
 	}
 }
