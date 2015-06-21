@@ -45,7 +45,7 @@ static izcmd_idx;
 #if defined FILTERSCRIPT
 	public OnFilterScriptInit()
 	{
-	   	if((izcmd_idx = funcidx("OnPlayerCommandPerformed")) == -1)
+	   	if((izcmd_idx = funcidx("OnPlayerCommandPerformed")) != -1)
 	   	{
 	   	    #emit LCTRL       1
 			#emit NEG
@@ -63,8 +63,8 @@ static izcmd_idx;
 			#emit LREF.pri  izcmd_pointer_OPCP
 			#emit STOR.pri  izcmd_pointer_OPCP
 	   	}
-	    #if defined izcmd_OnFilterScriptInit
-			return izcmd_OnFilterScriptInit();
+	    #if defined izcmd_OnGameModeInit
+			return izcmd_OnGameModeInit();
 		#else
 			return 1;
 		#endif
@@ -144,13 +144,15 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			#emit LOAD.pri pointer
 			#emit SCTRL      6
 
+			#emit PUSH.pri
+
 			#if !defined OnPlayerCommandPerformed
+
 		    switch(false)
 			{
 			    case true:
 			    {
             #endif
-                    #emit PUSH.pri
 			  		#emit PUSH.S cmdtext
 					#emit PUSH.S playerid
 					#emit PUSH.C 12
@@ -169,11 +171,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			#endif
 
+			#emit POP.pri
 			#emit RETN
 		}
 		else
 		{
-            memcpy(funcname,cmdtext[1],16,(strlen(cmdtext)-1)<<2,MAX_FUNC_NAME-4);
+            memcpy(funcname,cmdtext[1],16,strlen(cmdtext)<<2,MAX_FUNC_NAME-4);
 		    if((izcmd_idx = funcidx(funcname)) == -1)
 		    {
 		       	#if !defined OnPlayerCommandPerformed
@@ -225,13 +228,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				#emit LOAD.pri pointer
 				#emit SCTRL      6
 
+                #emit PUSH.pri
+
 				#if !defined OnPlayerCommandPerformed
 			    switch(false)
 				{
 				    case true:
 				    {
 	            #endif
-	                    #emit PUSH.pri
 				  		#emit PUSH.S cmdtext
 						#emit PUSH.S playerid
 						#emit PUSH.C 12
@@ -250,6 +254,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				#endif
 
+				#emit POP.pri
 				#emit RETN
     		}
 		}
@@ -277,13 +282,15 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			#emit LOAD.pri pointer
 			#emit SCTRL      6
 
+            #emit PUSH.pri
+
 			#if !defined OnPlayerCommandPerformed
 		    switch(false)
 			{
 			    case true:
 			    {
             #endif
-                    #emit PUSH.pri
+
 			  		#emit PUSH.S cmdtext
 					#emit PUSH.S playerid
 					#emit PUSH.C 12
@@ -302,13 +309,16 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			#endif
 
+			#emit POP.pri
 			#emit RETN
 		}
 		else
 		{
-		    memcpy(funcname,cmdtext[1],16,(pos-1)<<2,28);
+		    cmdtext[pos] = 0;
+		    memcpy(funcname,cmdtext[1],16,pos<<2,28);
 		    if((izcmd_idx = funcidx(funcname)) == -1)
 		    {
+				cmdtext[pos] = ' ';
           		#if !defined OnPlayerCommandPerformed
         			return 0;
 	   			#endif
@@ -345,7 +355,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				#emit LREF.pri  pointer
 				#emit STOR.pri  pointer
 
-				cmdtext[pos] = 0;
 				setproperty(.name = cmdtext,.value = pointer);
 				cmdtext[pos] = ' ';
 
@@ -366,13 +375,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				#emit LOAD.pri pointer
 				#emit SCTRL      6
 
+                #emit PUSH.pri
 				#if !defined OnPlayerCommandPerformed
 			    switch(false)
 				{
 				    case true:
 				    {
 	            #endif
-	                    #emit PUSH.pri
+
 				  		#emit PUSH.S cmdtext
 						#emit PUSH.S playerid
 						#emit PUSH.C 12
@@ -391,6 +401,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				#endif
 
+				#emit POP.pri
 				#emit RETN
     		}
 		}
