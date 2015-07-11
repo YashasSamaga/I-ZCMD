@@ -63,8 +63,8 @@ static izcmd_idx;
 			#emit LREF.pri  izcmd_pointer_OPCP
 			#emit STOR.pri  izcmd_pointer_OPCP
 	   	}
-	    #if defined izcmd_OnGameModeInit
-			return izcmd_OnGameModeInit();
+	    #if defined izcmd_OnFilterScriptInit
+			return izcmd_OnFilterScriptInit();
 		#else
 			return 1;
 		#endif
