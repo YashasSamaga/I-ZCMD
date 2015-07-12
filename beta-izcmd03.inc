@@ -85,30 +85,31 @@ static izcmd_Init()
 		#emit LREF.pri  izcmd_pointer_OPCP
 		#emit STOR.pri  izcmd_pointer_OPCP
    	}
+   	//COMPILER BUG FIX
+	{
+	   	#emit LCTRL 1
+	    #emit NEG
+	    #emit STOR.S.PRI offsetDAT
 
-   	#emit LCTRL 1
-    #emit NEG
-    #emit STOR.S.PRI offsetDAT
+	    #emit ADD.C 32
+	    #emit STOR.S.PRI addr
+	    #emit LREF.S.PRI addr
+	    #emit LOAD.S.ALT addr
+	    #emit ADD
+	    #emit CONST.ALT 32
+	    #emit SUB
+	    #emit STOR.S.PRI offsetPFT
 
-    #emit ADD.C 32
-    #emit STOR.S.PRI addr
-    #emit LREF.S.PRI addr
-    #emit LOAD.S.ALT addr
-    #emit ADD
-    #emit CONST.ALT 32
-    #emit SUB
-    #emit STOR.S.PRI offsetPFT
-
-    #emit LOAD.S.PRI offsetDAT
-	#emit ADD.C 36
-    #emit STOR.S.PRI addr
-    #emit LREF.S.PRI addr
-    #emit LOAD.S.ALT addr
-    #emit ADD
-    #emit CONST.ALT 36
-    #emit SUB
-    #emit STOR.S.PRI offsetNFT
-
+	    #emit LOAD.S.PRI offsetDAT
+		#emit ADD.C 36
+	    #emit STOR.S.PRI addr
+	    #emit LREF.S.PRI addr
+	    #emit LOAD.S.ALT addr
+	    #emit ADD
+	    #emit CONST.ALT 36
+	    #emit SUB
+	    #emit STOR.S.PRI offsetNFT
+	}
     number_of_publics = ((offsetNFT - offsetPFT) >>> 3);
 
     for(new i = 0; i < number_of_publics; i++)
@@ -247,71 +248,74 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
 	#endif
 
-	static packed_cmd_name[MAX_FUNC_NAME - 4 char],nullstr[] = "",min_char_checks,start,end,pos,tmp1,tmp2;
+	static packed_cmd_name[MAX_FUNC_NAME - 4 char],nullstr[] = "",min_char_checks,start,end,pos,tmp1,tmp2,tmp3;
 
 	if((start = izcmd_start_index[(tmp1 = cmdtext[1] - 64)]) == -1)
 	{
-	    #if !defined OnPlayerCommandPerformed
+		#if !defined OnPlayerCommandPerformed
 		switch(false)
 		{
 		    case true:
 		    {
-        #endif
-             		#emit PUSH.C 0
-			  		#emit PUSH.S cmdtext
-					#emit PUSH.S playerid
-					#emit PUSH.C 12
-
-					#emit LCTRL      6
-					#emit ADD.C      28
-					#emit PUSH.pri
-
-					#emit LOAD.pri izcmd_pointer_OPCP
-					#emit SCTRL      6
-
-					#emit RETN
-
-    	#if !defined OnPlayerCommandPerformed
-			    }
-			}
 		#endif
+        		#emit PUSH.C 0
+			  	#emit PUSH.S cmdtext
+				#emit PUSH.S playerid
+				#emit PUSH.C 12
 
-			#emit ZERO.pri
-			#emit RETN
+				#emit LCTRL      6
+				#emit ADD.C      28
+				#emit PUSH.pri
+
+				#emit LOAD.pri izcmd_pointer_OPCP
+				#emit SCTRL      6
+
+				#emit RETN
+     	#if !defined OnPlayerCommandPerformed
+		    }
+		}
+  		#endif
+
+   		#emit ZERO.pri
+		#emit RETN
 	}
 
-	new k = 0, i = (start + (end = izcmd_end_index[tmp1]))>>1;
+	new i = (start + (end = izcmd_end_index[tmp1]))>>1;
 
-    if( (pos = (strfind(cmdtext[1]," ",false,1) + 1)) )	cmdtext[pos] = 0;
-    
+    if((pos = (strfind(cmdtext[1]," ",false,0) + 1)))	cmdtext[pos] = 0;
+
 	min_char_checks = strpack(packed_cmd_name,cmdtext[1])>>2;
 
+    #emit LOAD.pri packed_cmd_name
+    #emit STOR.pri tmp3
+
     loop:
-	if((tmp1 = izcmd_commands[i][0]) < (tmp2 = packed_cmd_name[0]))
+	if((tmp1 = izcmd_commands[i][0]) < tmp3)
 	{
 	    i = (end + (start = i+1))>>1;
 	}
-	else if(tmp1 > tmp2)
+	else if(tmp1 > tmp3)
 	{
-	    i = ((end = i-1) + start)>>1;
+     	i = ((end = i-1) + start)>>1;
 	}
 	else
 	{
+	    new k;
 		while(k++ < min_char_checks)
 		{
 			if((tmp1 = izcmd_commands[i][k]) < (tmp2 = packed_cmd_name[k]))
 			{
-			    i = (end + (start = i+1))>>1;
-			    k = 0;
-			    if(start > end) goto cmd_invalid;
-			    goto loop;
+       			i = (end + (start = i+1))>>1;
+
+				if(start > end) goto cmd_invalid;
+				goto loop;
+
 			}
 			else if(tmp1 > tmp2)
 			{
-			    i = ((end = i-1) + start)>>1;
-			    k = 0;
-			    if(start > end) goto cmd_invalid;
-			    goto loop;
+       			i = ((end = i-1) + start)>>1;
+                if(start > end) goto cmd_invalid;
+				goto loop;
 			}
 		}
 
@@ -348,9 +352,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
             #emit PUSH.pri
 
 			cmdtext[pos] = ' ';
-			
-			#if !defined OnPlayerCommandPerformed
-		    switch(false)
+
+  			#if !defined OnPlayerCommandPerformed
+      		switch(false)
 			{
 			    case true:
 			    {
@@ -378,7 +382,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
             #emit STACK 8
 			#emit RETN
 		}
-	  	return 1;
 	}
 	if(start > end)
     {
@@ -411,13 +414,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		}
 		#endif
 
-		#emit STACK 4
+  		#emit STACK 4
 		#emit RETN
 	}
-    //k = 0;
 	goto loop;
-
-	//COMPILER BUG FIX
-	return 1;
 }
 /******************************************************************************************************************************/
