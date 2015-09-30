@@ -31,6 +31,10 @@
 
 #define CMD_SUCCESS 1
 #define CMD_FAILURE 0
+
+#if !defined isnull
+        #define isnull(%1) ((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
+#endif
 /******************************************************************************************************************************/
 #if defined OnPlayerCommandReceived
 	forward OnPlayerCommandReceived(playerid,cmdtext[]);
