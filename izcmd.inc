@@ -58,9 +58,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		    pos = strlen(cmdtext);
 	        strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
 		    #if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\r"));
+				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
 			#else
-				return CallLocalFunction(funcname,"is",playerid,"\r");
+				return CallLocalFunction(funcname,"is",playerid,"\1");
 			#endif
 		}
 		else
@@ -95,9 +95,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		else
 		{
 		   	#if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\r"));
+				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
 			#else
-				return CallLocalFunction(funcname,"is",playerid,"\r");
+				return CallLocalFunction(funcname,"is",playerid,"\1");
 			#endif
 		}
 	#endif
