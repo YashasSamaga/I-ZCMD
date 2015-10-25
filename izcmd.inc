@@ -11,21 +11,21 @@
 *******************************************************************************************************************************/
 #if defined _I_ZCMD_INCLUDED_V0_2_2_
 	#endinput
-#endif	
+#endif
 #define _I_ZCMD_INCLUDED_V0_2_2_
 /******************************************************************************************************************************/
 #define MAX_FUNC_NAME (32)
 
 #define COMMAND:%1(%2)          \
 			forward cmd_%1(%2); \
-			public cmd_%1(%2)		
-			
+			public cmd_%1(%2)
+
 #define CMD:%1(%2) \
 			COMMAND:%1(%2)
 
 #define command(%1,%2,%3) \
-			COMMAND:%1(%2, %3)      
-      
+			COMMAND:%1(%2, %3)
+
 #define cmd(%1,%2,%3) \
 			COMMAND:%1(%2, %3)
 
@@ -49,7 +49,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
 	#endif
 	static funcname[MAX_FUNC_NAME] = "cmd_";
-	
+
 	#if defined IZCMD_ENABLE_CASE_SENSITIVITY
 		static pos;
 
@@ -57,6 +57,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		{
 		    pos = strlen(cmdtext);
 	        strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+
 		    #if defined OnPlayerCommandPerformed
 				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
 			#else
@@ -68,11 +69,22 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		    strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
 	    	while (cmdtext[pos] == ' ') pos++;
 
-			#if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
-			#else
-				return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
-			#endif
+			if(cmdtext[pos])
+			{
+		  		#if defined OnPlayerCommandPerformed
+					return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
+				#else
+					return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
+				#endif
+			}
+			else
+			{
+			   	#if defined OnPlayerCommandPerformed
+					return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
+				#else
+					return CallLocalFunction(funcname,"is",playerid,"\1");
+				#endif
+			}
 		}
 	#else
 	    new pos = 1;
