@@ -3,16 +3,17 @@
 
  This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
 
- Version:0.2.2
+ Version:0.2.2.1
 
  Credits:
  Yashas
  Zeex for the original include
 *******************************************************************************************************************************/
-#if defined _I_ZCMD_INCLUDED_V0_2_2_
+#if defined _I_ZCMD_INCLUDED_V0_2_2_1_
 	#endinput
 #endif
-#define _I_ZCMD_INCLUDED_V0_2_2_
+#define _I_ZCMD_INCLUDED
+#define _I_ZCMD_INCLUDED_V0_2_2_1_
 /******************************************************************************************************************************/
 #define MAX_FUNC_NAME (32)
 
@@ -55,19 +56,19 @@ public OnPlayerCommandText(playerid, cmdtext[])
 
 		if((pos = strfind(cmdtext," ",false,1)) == -1)
 		{
-		    pos = strlen(cmdtext);
-	        strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+		    	pos = strlen(cmdtext);
+	            	strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
 
-		    #if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
+		    	#if defined OnPlayerCommandPerformed
+		    		return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
 			#else
 				return CallLocalFunction(funcname,"is",playerid,"\1");
 			#endif
 		}
 		else
 		{
-		    strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
-	    	while (cmdtext[pos] == ' ') pos++;
+		    	strmid(funcname[4],cmdtext,1,pos,MAX_FUNC_NAME-4);
+	    		while (cmdtext[pos] == ' ') pos++;
 
 			if(cmdtext[pos])
 			{
@@ -87,15 +88,15 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 		}
 	#else
-	    new pos = 1;
+		 new pos = 1;
 
-    	while(cmdtext[pos] > ' ')
-			if(cmdtext[pos] == '_') funcname[pos++ + 3] = '_';
-			else funcname[pos+3] = cmdtext[pos++] | 0x20;
+    		while(cmdtext[pos] > ' ')
+		if(cmdtext[pos] == '_') funcname[pos++ + 3] = '_';
+		else funcname[pos+3] = cmdtext[pos++] | 0x20;
 
 		funcname[pos+3] = 0;
 
-	    while (cmdtext[pos] == ' ') pos++;
+	    	while (cmdtext[pos] == ' ') pos++;
 		if(cmdtext[pos])
 		{
 	  		#if defined OnPlayerCommandPerformed
