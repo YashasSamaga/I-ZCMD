@@ -88,15 +88,15 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 		}
 	#else
-		 new pos = 1;
+		new pos = 1;
 
-    		while(cmdtext[pos] > ' ')
+		while(cmdtext[pos] > ' ')
 		if(cmdtext[pos] == '_') funcname[pos++ + 3] = '_';
 		else funcname[pos+3] = cmdtext[pos++] | 0x20;
 
 		funcname[pos+3] = 0;
 
-	    	while (cmdtext[pos] == ' ') pos++;
+		while (cmdtext[pos] == ' ') pos++;
 		if(cmdtext[pos])
 		{
 	  		#if defined OnPlayerCommandPerformed
