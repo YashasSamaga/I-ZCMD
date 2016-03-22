@@ -3,7 +3,7 @@
 
  This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
 
- Version:0.2.2.1
+ Version:0.2.2.2
 
  Credits:
  Yashas
