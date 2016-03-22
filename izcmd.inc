@@ -15,7 +15,7 @@
 #define _I_ZCMD_INCLUDED
 #define _I_ZCMD_INCLUDED_V0_2_2_1_
 /******************************************************************************************************************************/
-#define MAX_FUNC_NAME (32)
+#define MAX_CLIENT_MSG_LENGTH (144)
 
 #define COMMAND:%1(%2)          \
 			forward cmd_%1(%2); \
@@ -49,7 +49,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	#if defined OnPlayerCommandReceived
 	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
 	#endif
-	static funcname[MAX_FUNC_NAME] = "cmd_";
+	static funcname[MAX_CLIENT_MSG_LENGTH+4] = "cmd_";
 
 	#if defined IZCMD_ENABLE_CASE_SENSITIVITY
 		static pos;
