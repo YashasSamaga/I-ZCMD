@@ -9,11 +9,11 @@
  Yashas
  Zeex for the original include
 *******************************************************************************************************************************/
-#if defined _I_ZCMD_INCLUDED_V0_2_2_1_
+#if defined _I_ZCMD_INCLUDED_V0_2_2_2_
 	#endinput
 #endif
 #define _I_ZCMD_INCLUDED
-#define _I_ZCMD_INCLUDED_V0_2_2_1_
+#define _I_ZCMD_INCLUDED_V0_2_2_2_
 /******************************************************************************************************************************/
 #define MAX_CLIENT_MSG_LENGTH (144)
 
