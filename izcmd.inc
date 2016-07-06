@@ -3,17 +3,19 @@
 
  This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
 
- Version:0.2.2.2
+ Version:0.2.2.3
+
+ Github Link: https://github.com/YashasSamaga/I-ZCMD
 
  Credits:
  Yashas
  Zeex for the original include
 *******************************************************************************************************************************/
-#if defined _I_ZCMD_INCLUDED_V0_2_2_2_
+#if defined _I_ZCMD_INCLUDED_V0_2_2_3_
 	#endinput
 #endif
 #define _I_ZCMD_INCLUDED
-#define _I_ZCMD_INCLUDED_V0_2_2_2_
+#define _I_ZCMD_INCLUDED_V0_2_2_3_
 /******************************************************************************************************************************/
 #define MAX_CLIENT_MSG_LENGTH (144)
 
