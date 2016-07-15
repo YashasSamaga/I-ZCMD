@@ -1,131 +1,100 @@
-/*******************************************************************************************************************************
- ZCMD Improved (I-ZCMD)
+/*
+  ZCMD Improved (I-ZCMD)
+  
+  This include is just a re-make of the ZCMD Command Processor (v 0.3.1 31/10/2009) 
+  originnaly developed by Zeex.
+  
+  Github Link: https://github.com/YashasSamaga/I-ZCMD
+  
+  Credits:
+  Untonyst, Yashas, Zeex,
+*/
 
- This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
-
- Version:0.2.2.3
-
- Github Link: https://github.com/YashasSamaga/I-ZCMD
-
- Credits:
- Yashas
- Zeex for the original include
-*******************************************************************************************************************************/
-#if defined _I_ZCMD_INCLUDED_V0_2_2_3_
+#if defined _izcmd_included || defined CMD
 	#endinput
-#endif
-#define _I_ZCMD_INCLUDED
-#define _I_ZCMD_INCLUDED_V0_2_2_3_
-/******************************************************************************************************************************/
-#define MAX_CLIENT_MSG_LENGTH (144)
+#endif 
+#define _izcmd_included
 
-#define COMMAND:%1(%2)          \
-			forward cmd_%1(%2); \
-			public cmd_%1(%2)
+#define CMD_SUCCESS 1
+#define CMD_FAILURE 0
 
-#define CMD:%1(%2) \
-			COMMAND:%1(%2)
+#define COMMAND:%0(%1) \
+		forward cmd_%0(%1); \
+		public cmd_%0(%1)
 
-#define command(%1,%2,%3) \
-			COMMAND:%1(%2, %3)
+#define CMD:%0(%1) \
+		COMMAND:%0(%1)
 
-#define cmd(%1,%2,%3) \
-			COMMAND:%1(%2, %3)
+#define command:%0(%1) \
+		COMMAND:%0(%1)
+		
+#define cmd:%0(%1) \
+		COMMAND:%0(%1)
 
 #define ZALT:%0:%1; \
 	 	forward cmd_%1(playerid, params[]); \
 		public cmd_%1(playerid, params[]) \
 			return cmd_%0(playerid, params);
 
-#define CMD_SUCCESS 1
-#define CMD_FAILURE 0
-
 #if !defined isnull
-        #define isnull(%1) ((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
+	#define isnull(%0)\
+		(((%0[0]) == 0) || ((%0[0]) == '\1') && ((%0[1]) == 0))
 #endif
-/******************************************************************************************************************************/
+
 #if defined OnPlayerCommandReceived
-	forward OnPlayerCommandReceived(playerid,cmdtext[]);
+forward OnPlayerCommandReceived(playerid, cmdtext[]);
 #endif
+
 #if defined OnPlayerCommandPerformed
-	forward OnPlayerCommandPerformed(playerid,cmdtext[], success);
+forward OnPlayerCommandPerformed(playerid, cmdtext[], success);
 #endif
-/******************************************************************************************************************************/
-public OnPlayerCommandText(playerid, cmdtext[])
+
+public OnPlayerCommandText(playerid, cmdtext[]) 
 {
-	#if defined OnPlayerCommandReceived
-	    if(!OnPlayerCommandReceived(playerid,cmdtext)) return 1;
-	#endif
-	static funcname[MAX_CLIENT_MSG_LENGTH+4] = "cmd_";
+#if defined OnPlayerCommandReceived
+	if (OnPlayerCommandReceived(playerid, cmdtext) == 0)
+	{
+		return 1;
+	}
+#endif
 
-	#if defined IZCMD_ENABLE_CASE_SENSITIVITY
-		static pos;
+	static function[32] = "cmd_";
 
-		if((pos = strfind(cmdtext," ",false,1)) == -1)
-		{
-		    	pos = strlen(cmdtext);
-	            	strmid(funcname[4],cmdtext,1,pos,MAX_CLIENT_MSG_LENGTH-4);
+	new i;
+	while (cmdtext[++i] > ' ')
+	{
+	    function[i + 3] = tolower(cmdtext[i]);
+	}
+	
+	while (cmdtext[i++] == ' ')
+	{
+		// magic
+	}
 
-		    	#if defined OnPlayerCommandPerformed
-		    		return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
-			#else
-				return CallLocalFunction(funcname,"is",playerid,"\1");
-			#endif
-		}
-		else
-		{
-		    	strmid(funcname[4],cmdtext,1,pos,MAX_CLIENT_MSG_LENGTH-4);
-	    		while (cmdtext[pos] == ' ') pos++;
-
-			if(cmdtext[pos])
-			{
-		  		#if defined OnPlayerCommandPerformed
-					return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
-				#else
-					return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
-				#endif
-			}
-			else
-			{
-			   	#if defined OnPlayerCommandPerformed
-					return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
-				#else
-					return CallLocalFunction(funcname,"is",playerid,"\1");
-				#endif
-			}
-		}
-	#else
-		new pos = 1;
-
-		while(cmdtext[pos] > ' ')
-		if(cmdtext[pos] == '_') funcname[pos++ + 3] = '_';
-		else funcname[pos+3] = cmdtext[pos++] | 0x20;
-
-		funcname[pos+3] = 0;
-
-		while (cmdtext[pos] == ' ') pos++;
-		if(cmdtext[pos])
-		{
-	  		#if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,cmdtext[pos]));
-			#else
-				return CallLocalFunction(funcname,"is",playerid,cmdtext[pos]);
-			#endif
-		}
-		else
-		{
-		   	#if defined OnPlayerCommandPerformed
-				return OnPlayerCommandPerformed(playerid,cmdtext,CallLocalFunction(funcname,"is",playerid,"\1"));
-			#else
-				return CallLocalFunction(funcname,"is",playerid,"\1");
-			#endif
-		}
-	#endif
+#if defined OnPlayerCommandPerformed
+	if (cmdtext[--i] == EOF) 
+	{
+		return OnPlayerCommandPerformed(playerid, cmdtext, 
+			CallLocalFunction(function, !"ds", playerid, !"\1")
+		);
+	}
+	return OnPlayerCommandPerformed(playerid, cmdtext, 
+		CallLocalFunction(function, !"ds", playerid, cmdtext[i])
+	);
+#else
+	if (cmdtext[--i] == EOF) 
+	{
+		return CallLocalFunction(function, !"ds", playerid, !"\1");
+	}
+	return CallLocalFunction(function, !"ds", playerid, cmdtext[i]);
+#endif
 }
 #if defined _ALS_OnPlayerCommandText
-    #undef OnPlayerCommandText
+	#undef OnPlayerCommandText
 #else
-    #define _ALS_OnPlayerCommandText
+	#define _ALS_OnPlayerCommandText
 #endif
-#define OnPlayerCommandText izcmd_OnPlayerCommandText
+#if defined izcmd_OnPlayerCommandText
 forward izcmd_OnPlayerCommandText(playerid, cmdtext[]);
+#endif
+#define	OnPlayerCommandText izcmd_OnPlayerCommandText
