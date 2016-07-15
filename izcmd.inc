@@ -32,6 +32,11 @@
 #define cmd(%1,%2,%3) \
 			COMMAND:%1(%2, %3)
 
+#define ZALT:%0:%1; \
+	 	forward cmd_%1(playerid, params[]); \
+		public cmd_%1(playerid, params[]) \
+			return cmd_%0(playerid, params);
+
 #define CMD_SUCCESS 1
 #define CMD_FAILURE 0
 
