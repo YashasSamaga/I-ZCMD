@@ -125,11 +125,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 #if defined _ALS_OnPlayerCommandText
     #undef OnPlayerCommandText
 #else
-	#define _ALS_OnPlayerCommandText
+    #define _ALS_OnPlayerCommandText
 #endif
-
 #define OnPlayerCommandText izcmd_OnPlayerCommandText
-
 #if defined izcmd_OnPlayerCommandText
-	#error "Use OnPlayerCommandReceived instead of OnPlayerCommandText"
+     forward izcmd_OnPlayerCommandText(playerid, cmdtext[]);
 #endif
