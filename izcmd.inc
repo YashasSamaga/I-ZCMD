@@ -122,12 +122,3 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		}
 	#endif
 }
-#if defined _ALS_OnPlayerCommandText
-    #undef OnPlayerCommandText
-#else
-    #define _ALS_OnPlayerCommandText
-#endif
-#define OnPlayerCommandText izcmd_OnPlayerCommandText
-#if defined izcmd_OnPlayerCommandText
-     forward izcmd_OnPlayerCommandText(playerid, cmdtext[]);
-#endif
