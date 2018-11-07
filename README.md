@@ -12,7 +12,7 @@ ZCMD hasn't been updated in the last 6 years. A lot of advancements have been ma
 
 
 ## How to install?
-For those who are already using ZCMD, you just need to replace ZCMD include with iZCMD include. There is no change in functionality (by default); all the changes affect the speed and efficiency of the script. The only new feature in iZCMD is that now case-sensitivity can be turned on/off by defining `IZCMD_ENABLE_CASE_SENSITIVITY` before including iZCMD. To maximize compatibility, iZCMD is not case-sensitive by default (so is ZCMM). 
+For those who are already using ZCMD, you just need to replace ZCMD include with iZCMD include. There is no change in functionality (by default); all the changes affect the speed and efficiency of the script. The only new feature in iZCMD is that now case-sensitivity can be turned on/off by defining `IZCMD_ENABLE_CASE_SENSITIVITY` before including iZCMD. To maximize compatibility, iZCMD is not case-sensitive by default (so is ZCMD). 
 
 For those who are not using ZCMD, you need to download iZCMD include and paste it in your include folder. All tutorials targetted at ZCMD are applicable to iZCMD since there is no change in functionality and syntax in iZCMD from ZCMD.
 
