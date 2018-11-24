@@ -1,0 +1,9 @@
+{
+	"user": "YashasSamaga",
+	"repo": "I-ZCMD",
+	"entry": "test.pwn",
+	"output": "test.amx",
+	"dependencies": [
+		"sampctl/samp-stdlib"
+	]
+}
