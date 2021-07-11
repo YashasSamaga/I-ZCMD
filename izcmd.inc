@@ -17,10 +17,11 @@
 #define _I_ZCMD_INCLUDED
 #define _I_ZCMD_INCLUDED_V0_2_3_0_
 /******************************************************************************************************************************/
-#if defined _I_ZCMD_ABBREVIATION_ENABLE
+#if defined IZCMD_ABBREVIATION_ENABLE
 
-	#define ABRT:%1[%2](%3) \
+	#define ABRT:%1[%2](%3); \
 		cmd_%1(%3); public cmd_%1(%3) { return cmd_%2 ; }
+		
 #endif
 /******************************************************************************************************************************/
 #define MAX_CLIENT_MSG_LENGTH (144)
