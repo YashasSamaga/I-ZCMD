@@ -30,12 +30,16 @@
 /******************************************************************************************************************************/
 #if defined IZCMD_COMMAND_PERMISSIONS
 
-	#define PERM:%1(%2)[%3] { %4 }\
-		cmd_%1(%2); public cmd_%1(%2) \ 
-		{ \
-			if(! %3 ) return CMD_FAILURE; \
-			%4 \
-		}
+	#define CheckIfCmdCanPerform(%0); \
+		if(! %0 ) return CMD_FAILURE;
+	
+	#define CheckIfPlayerCanPerformCmd(%0,%1); \
+		static msg = random(sizeof(IZCMD_COMMAND_CANT_PERFORM)),static string[300]; \
+		format(string, sizeof(string), "%s", IZCMD_COMMAND_CANT_PERFORM[msg]); \
+		if(! %1 ) return SendClientMessage(%0,-1,string);
+		
+	#define IZCMD_FAIL_REPORT_STRING(%0); \
+		static IZCMD_COMMAND_CANT_PERFORM[][] = { %0 };
 
 #endif	
 /******************************************************************************************************************************/
