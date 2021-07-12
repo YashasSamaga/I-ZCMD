@@ -34,9 +34,9 @@
 		if(! %0 ) return CMD_FAILURE;
 	
 	#define CheckIfPlayerCanPerformCmd(%0,%1); \
-		static msg = random(sizeof(IZCMD_COMMAND_CANT_PERFORM)),static string[300]; \
-		format(string, sizeof(string), "%s", IZCMD_COMMAND_CANT_PERFORM[msg]); \
-		if(! %1 ) return SendClientMessage(%0,-1,string);
+		static izcmdmsg = random(sizeof(IZCMD_COMMAND_CANT_PERFORM)),static izcmdstring[300]; \
+		format(izcmdstring, sizeof(izcmdstring), "%s", IZCMD_COMMAND_CANT_PERFORM[izcmdmsg]); \
+		if(! %1 ) return SendClientMessage(%0,-1,izcmdstring);
 		
 	#define IZCMD_FAIL_REPORT_STRING(%0); \
 		static IZCMD_COMMAND_CANT_PERFORM[][] = { %0 };
