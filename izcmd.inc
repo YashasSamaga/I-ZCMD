@@ -3,13 +3,14 @@
 
  This include is just a re-make of the ZCMD Command Processor ( V0.3.1 31/10/2009) originnaly developed by Zeex.
 
- Version: 0.2.3.0 (August 1st 2016)
+ Version: 0.2.3.1 (July 12 2021)
 
- GitHub Link: https://github.com/YashasSamaga/I-ZCMD
+ GitHub Link: https://github.com/DEntisT-SAMP/I-ZCMD/patch-1
 
  Credits:
  Zeex for ZCMD (the very idea of making publics for each command was introduced by Zeex in ZCMD)
  Yashas
+ DEntisT (implemented more functonality into the include)
 *******************************************************************************************************************************/
 #if defined _I_ZCMD_INCLUDED
 	#endinput
@@ -20,9 +21,23 @@
 #if defined IZCMD_ABBREVIATION_ENABLE
 
 	#define ABRT:%1[%2](%3); \
-		cmd_%1(%3); public cmd_%1(%3) { return cmd_%2 ; }
+		cmd_%1(%3); public cmd_%1(%3) \ 
+		{ \
+			return cmd_%2 ; \
+		}
 		
 #endif
+/******************************************************************************************************************************/
+#if defined IZCMD_COMMAND_PERMISSIONS
+
+	#define PERM:%1(%2)[%3] { %4 }\
+		cmd_%1(%2); public cmd_%1(%2) \ 
+		{ \
+			if(! %3 ) return CMD_FAILURE; \
+			%4 \
+		}
+
+#endif	
 /******************************************************************************************************************************/
 #define MAX_CLIENT_MSG_LENGTH (144)
 #define MAX_FUNC_NAME (32)
