@@ -11,7 +11,7 @@ ZCMD hasn't been updated for many years. A lot of advancements made in these yea
 ## Switching from ZCMD to iZCMD
 By default there is no change in *functionality* between iZCMD and ZCMD; all the changes affect the speed and efficiency of the script. The only new feature introduced in iZCMD is the ability to toggle case-sensitivity of commands (i.e. should `/pm` be treated as the same command as `/PM`). To allow case-sensitivity, define `IZCMD_ENABLE_CASE_SENSITIVITY` before including iZCMD.
 
-**TL;DR:** replace your include header from `izcmd.inc` to `izcmd.inc`
+**TL;DR:** replace your include header from `zcmd.inc` to `izcmd.inc`.
 
 ## Tutorial
 
